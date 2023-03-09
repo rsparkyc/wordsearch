@@ -1,5 +1,14 @@
 import * as React from "react"
+import WordSearch from "../components/WordSearch"
 
-export default function Home() {
-  return <div>Hello world!</div>
+const IndexPage = () => {
+  return (
+    <div>
+      <h1>Daily Word Search</h1>
+      <WordSearch />
+    </div>
+  )
 }
+
+export default IndexPage
+

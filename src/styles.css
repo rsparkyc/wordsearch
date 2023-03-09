@@ -1,0 +1,23 @@
+.wordsearch {
+  display: block;
+  margin: 0 auto;
+  max-width: 600px;
+  text-align: center;
+}
+
+.row {
+  clear: both;
+}
+
+.cell {
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  border: 1px solid #000;
+  float: left;
+}
+
