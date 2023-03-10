@@ -1,35 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from 'react';
+import { generateGrid } from '../utils/helpers';
 import "../styles.css";
 
-const WordSearch = () => {
-  const [grid, setGrid] = useState([]);
 
-  useEffect(() => {
-    // Generate grid code
-    const newGrid = [];
-    for (let i = 0; i < 8; i++) {
-      const row = [];
-      for (let j = 0; j < 8; j++) {
-        row.push(String.fromCharCode(Math.floor(Math.random() * 26) + 65));
-      }
-      newGrid.push(row);
-    }
-    setGrid(newGrid);
-  }, []);
+const WordSearch = () => {
+  const gridSize = 12;
+  const [grid, setGrid] = useState(generateGrid(12));
+
+  const handleClick = () => {
+    setGrid(generateGrid(12));
+  }
 
   return (
-    <div className="wordsearch">
-      {grid.map((row, rowIndex) => (
-        <div key={rowIndex} className="row">
-          {row.map((letter, colIndex) => (
-            <div key={`${rowIndex}-${colIndex}`} className="cell">
-              {letter}
-            </div>
-          ))}
-        </div>
-      ))}
+    <div>
+      <button onClick={handleClick}>Generate New Grid</button>
+      <div className="wordsearch">
+        {grid.map((row, i) => (
+          <div key={`row-${i}`} className="row">
+            {row.map((cell, j) => (
+              <div key={`cell-${i}-${j}`} className="cell">
+                {cell}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
+
 };
 
 export default WordSearch;
