@@ -1,4 +1,5 @@
 function generateGrid(gridSize) {
+  console.log("generating grid");
   const grid = [];
   for (let i = 0; i < gridSize; i++) {
     grid.push([]);
@@ -9,15 +10,11 @@ function generateGrid(gridSize) {
 
   for (var i = 0; i < 5; i++) {
     const word = getWordsForGame().validWords[i];
-    let insertResponse = tryToInsertWord(grid, word);
-    if (insertResponse) {
-      console.log("inserted");
-    }
-    else {
-      console.log("not inserted");
-    }
+    tryToInsertWord(grid, word);
   } 
   fillGridWithRandomLetters(grid);
+
+  console.log(generateAllStrings(grid));
 
   return grid;
 }
@@ -33,7 +30,6 @@ function fillGridWithRandomLetters(grid) {
     }
   }
 }
-
 
 function generateInsertionPoints(grid, word, direction) {
   const [dx, dy] = direction;
@@ -161,6 +157,58 @@ function randomLetter() {
   }
 }
 
+function generateAllStrings(grid) {
+  const rows = grid.length;
+  const cols = grid[0].length;
+  const allStrings = [];
+
+  // Add rows to allStrings
+  for (let i = 0; i < rows; i++) {
+    const rowString = grid[i].join('');
+    allStrings.push(rowString);
+  }
+
+  // Add columns to allStrings
+  for (let i = 0; i < cols; i++) {
+    let columnString = '';
+    for (let j = 0; j < rows; j++) {
+      columnString += grid[j][i];
+    }
+    allStrings.push(columnString);
+  }
+
+  // Add diagonals to allStrings
+  let merged = allStrings.concat(diagonals(grid));
+  return merged;
+}
+
+// This function takes in a square grid represented as a 2D array and returns an array
+// of all the diagonal strings in the grid (both top-left to bottom-right and bottom-left
+// to top-right diagonals).
+function diagonals(grid) {
+  const diagonals = []; // Initialize an empty array to store the diagonal strings.
+  const size = grid.length; // Get the size of the grid.
+  // Loop through each diagonal in the grid.
+  // There are (size * 2) - 1 diagonals in total.
+  for (let i = 0; i < size * 2 - 1; i++) {
+    let diagonal_tl_br = ""; // Initialize an empty string for the top-left to bottom-right diagonal.
+    let diagonal_bl_tr = ""; // Initialize an empty string for the bottom-left to top-right diagonal.
+    // Loop through each cell in the current diagonal.
+    for (let j = 0; j <= i; j++) {
+      const r = j; // Calculate the row index of the current cell.
+      const c = i - j; // Calculate the column index of the current cell.
+      // If the current cell is within the grid, add its value to both diagonal strings.
+      if (r < size && c < size) {
+        diagonal_tl_br += grid[r][c];
+        diagonal_bl_tr += grid[size - r - 1][c];
+      }
+    }
+    // Add the two diagonal strings to the diagonals array.
+    diagonals.push(diagonal_tl_br);
+    diagonals.push(diagonal_bl_tr);
+  }
+  return diagonals; // Return the array of diagonal strings.
+}
 
 module.exports = {
   generateGrid,

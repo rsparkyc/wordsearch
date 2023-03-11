@@ -4,12 +4,17 @@ import "../styles.css";
 
 
 const WordSearch = () => {
-  const gridSize = 12;
-  const [grid, setGrid] = useState(generateGrid(12));
+  const gridSize = 6;
+  const [grid, setGrid] = useState([]);
 
   const handleClick = () => {
-    setGrid(generateGrid(12));
+    setGrid(generateGrid(gridSize));
   }
+
+  // Call generateGrid once on mount to set the initial state
+  useState(() => {
+    setGrid(generateGrid(gridSize));
+  }, []);
 
   return (
     <div>
