@@ -1,20 +1,36 @@
-  const badWordsUrl = "https://raw.githubusercontent.com/jamesfdickinson/badwords/master/lib/lang.json";
+let myRng;
+function setRng(rng) {
+  if (!myRng){ 
+    myRng = rng(6);
+  }
+}
 
-  let wordCache = null;
+function getRandom() {
+  if (myRng) {
+    return myRng();
+  }
+  console.log("no random set");
+  return 0;
+}
 
-  async function getBadWords() {
-    if (wordCache) {
-      return wordCache;
-    } else {
-      const response = await fetch(badWordsUrl);
-      const json = await response.json();
-      const words = json.words;
-      wordCache = words;
-      return words;
-    }
-  };
+const badWordsUrl = "https://raw.githubusercontent.com/jamesfdickinson/badwords/master/lib/lang.json";
 
-async function generateGrid(gridSize) {
+let wordCache = null;
+
+async function getBadWords() {
+  if (wordCache) {
+    return wordCache;
+  } else {
+    const response = await fetch(badWordsUrl);
+    const json = await response.json();
+    const words = json.words;
+    wordCache = words;
+    return words;
+  }
+};
+
+async function generateGrid(gridSize, rng) {
+  setRng(rng);
 
   console.log("generating grid");
   const grid = [];
@@ -27,9 +43,9 @@ async function generateGrid(gridSize) {
 
   for (var i = 0; i < 5; i++) {
     const word = getWordsForGame().validWords[i];
-    tryToInsertWord(grid, word);
+    tryToInsertWord(grid, word, rng);
   } 
-  fillGridWithRandomLetters(grid);
+  fillGridWithRandomLetters(grid, rng);
 
   if (await containsBadWord(grid)) {
     return generateGrid(gridSize);
@@ -91,7 +107,7 @@ function generateInsertionPoints(grid, word, direction) {
 // Function to shuffle an array in place
 function shuffleArray(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(getRandom() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   return arr;
@@ -183,7 +199,7 @@ function randomLetter() {
   ];
 
   // Get a random number between 0 and 1
-  const randomNumber = Math.random();
+  const randomNumber = getRandom();
 
   // Iterate through the letter frequencies and find the letter that corresponds to the random number
   let cumulativeFrequency = 0;
@@ -250,5 +266,5 @@ function diagonals(grid) {
 
 module.exports = {
   generateGrid,
-  getWordsForGame,
+  getWordsForGame
 };

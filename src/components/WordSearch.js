@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { generateGrid } from '../utils/helpers';
 import "../styles.css";
+import seedrandom from 'seedrandom';
 
 const WordSearch = () => {
+
   const gridSize = 8;
   const [grid, setGrid] = useState([]);
 
   const handleClick = async () => {
-    const newGrid = await generateGrid(gridSize);
+    const newGrid = await generateGrid(gridSize, seedrandom);
     setGrid(newGrid);
   }
 
   // Call generateGrid once on mount to set the initial state
   useEffect(() => {
     async function generate() {
-      const newGrid = await generateGrid(gridSize);
+      const newGrid = await generateGrid(gridSize, seedrandom);
       setGrid(newGrid);
     }
     generate();
