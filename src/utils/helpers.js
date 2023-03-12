@@ -1,7 +1,7 @@
 let myRng;
 function setRng(rng) {
   if (!myRng){ 
-    myRng = rng(6);
+    myRng = rng(13);
   }
 }
 
@@ -62,7 +62,7 @@ async function containsBadWord(grid) {
     const lowerString = string.toLowerCase();
     for (const badWord of badWords) {
       const lowerBadWord = badWord.toLowerCase();
-      if (lowerString.includes(lowerBadWord)) {
+      if (lowerString.includes(lowerBadWord) || lowerString.includes(reverseString(lowerBadWord))) {
         console.log(`Bad word "${badWord}" found in string "${string}"`);
         return true;
       }
@@ -72,6 +72,9 @@ async function containsBadWord(grid) {
   return false;
 }
 
+function reverseString(str) {
+  return str.split("").reverse().join("");
+}
 
 function fillGridWithRandomLetters(grid) {
   const rows = grid.length;
