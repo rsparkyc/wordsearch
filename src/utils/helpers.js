@@ -1,4 +1,21 @@
-function generateGrid(gridSize) {
+  const badWordsUrl = "https://raw.githubusercontent.com/jamesfdickinson/badwords/master/lib/lang.json";
+
+  let wordCache = null;
+
+  async function getBadWords() {
+    if (wordCache) {
+      return wordCache;
+    } else {
+      const response = await fetch(badWordsUrl);
+      const json = await response.json();
+      const words = json.words;
+      wordCache = words;
+      return words;
+    }
+  };
+
+async function generateGrid(gridSize) {
+
   console.log("generating grid");
   const grid = [];
   for (let i = 0; i < gridSize; i++) {
@@ -14,10 +31,31 @@ function generateGrid(gridSize) {
   } 
   fillGridWithRandomLetters(grid);
 
-  console.log(generateAllStrings(grid));
+  if (await containsBadWord(grid)) {
+    return generateGrid(gridSize);
+  }
 
   return grid;
 }
+
+async function containsBadWord(grid) {
+  const allStrings = generateAllStrings(grid);
+  const badWords = await getBadWords();
+  
+  for (const string of allStrings) {
+    const lowerString = string.toLowerCase();
+    for (const badWord of badWords) {
+      const lowerBadWord = badWord.toLowerCase();
+      if (lowerString.includes(lowerBadWord)) {
+        console.log(`Bad word "${badWord}" found in string "${string}"`);
+        return true;
+      }
+    }
+  }
+  
+  return false;
+}
+
 
 function fillGridWithRandomLetters(grid) {
   const rows = grid.length;

@@ -1,19 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { generateGrid } from '../utils/helpers';
 import "../styles.css";
 
-
 const WordSearch = () => {
-  const gridSize = 6;
+  const gridSize = 8;
   const [grid, setGrid] = useState([]);
 
-  const handleClick = () => {
-    setGrid(generateGrid(gridSize));
+  const handleClick = async () => {
+    const newGrid = await generateGrid(gridSize);
+    setGrid(newGrid);
   }
 
   // Call generateGrid once on mount to set the initial state
-  useState(() => {
-    setGrid(generateGrid(gridSize));
+  useEffect(() => {
+    async function generate() {
+      const newGrid = await generateGrid(gridSize);
+      setGrid(newGrid);
+    }
+    generate();
   }, []);
 
   return (
@@ -32,8 +36,6 @@ const WordSearch = () => {
       </div>
     </div>
   );
-
 };
 
 export default WordSearch;
-
