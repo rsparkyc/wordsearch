@@ -1,7 +1,7 @@
 let myRng;
 function setRng(rng) {
   if (!myRng){ 
-    myRng = rng(13);
+    myRng = rng();
   }
 }
 
@@ -14,23 +14,36 @@ function getRandom() {
 }
 
 const badWordsUrl = "https://raw.githubusercontent.com/jamesfdickinson/badwords/master/lib/lang.json";
+const goodWordsUrl = "https://raw.githubusercontent.com/sindresorhus/word-list/main/words.txt";
 
-let wordCache = null;
-
+let badWordCache = null;
 async function getBadWords() {
-  if (wordCache) {
-    return wordCache;
+  if (badWordCache) {
+    return badWordCache;
   } else {
     const response = await fetch(badWordsUrl);
     const json = await response.json();
     const words = json.words;
-    wordCache = words;
+    badWordCache = words;
     return words;
+  }
+};
+
+let goodWordCache = null;
+async function getGoodWords() {
+  if (goodWordCache) {
+    return goodWordCache;
+  } else {
+    const response = await fetch(goodWordsUrl);
+    const text = await response.text();
+    goodWordCache = text.trim().split('\n');
+    return goodWordCache;
   }
 };
 
 async function generateGrid(gridSize, rng) {
   setRng(rng);
+  getGoodWords();
 
   console.log("generating grid");
   const grid = [];
@@ -41,11 +54,12 @@ async function generateGrid(gridSize, rng) {
     }
   }
 
-  for (var i = 0; i < 5; i++) {
-    const word = getWordsForGame().validWords[i];
-    tryToInsertWord(grid, word, rng);
+  for (const word of await getWordsForGame(100, 4, gridSize)) {
+    if (tryToInsertWord(grid, word)) {
+      console.log("inserted " + word);
+    }
   } 
-  fillGridWithRandomLetters(grid, rng);
+  fillGridWithRandomLetters(grid);
 
   if (await containsBadWord(grid)) {
     return generateGrid(gridSize);
@@ -155,11 +169,22 @@ function insertWord(grid, word, x, y, direction) {
   }
 }
 
-function getWordsForGame() {
-  const validWords = ["these", "are", "the", "awesome", "words"];
-  const blockedWords = ["ANGULAR", "VUE", "TYPESCRIPT", "REDUX", "MOBX"];
-  return { validWords, blockedWords };
+async function getWordsForGame(n, minLength, maxLength) {
+  const goodWords = await getGoodWords(); // assuming this function returns the list of good words
+  
+  const approvedWords = [];
+  
+  while (approvedWords.length < n) {
+    const randomIndex = Math.floor(getRandom() * goodWords.length);
+    const randomWord = goodWords[randomIndex];
+    
+    if (randomWord.length >= minLength && randomWord.length <= maxLength && !approvedWords.includes(randomWord)) {
+      approvedWords.push(randomWord);
+    }
+  }
+  return approvedWords;
 }
+
 
 function getRandomDirections() {
   const directions = [  
