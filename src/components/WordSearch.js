@@ -99,7 +99,7 @@ const WordSearch = () => {
   }, []);
 
   return (
-    <div>
+    <div className="wordsearch-container">
       <div className="wordsearch">
         {grid.map((row, i) => (
           <div key={`row-${i}`} className="row">
@@ -115,7 +115,17 @@ const WordSearch = () => {
           </div>
         ))}
       </div>
-      {queuedWord && <div>Queued Word: {queuedWord}</div>}
+      <div className="queued-word-container">
+      {queuedWord ? (
+        <>
+          <span>Queued Word: {queuedWord}</span>
+          <button style={{ marginLeft: "20px" }}>Submit</button>
+        </>
+      ) : (
+        <span>Select a word to queue for submission</span>
+      )}
+    </div>
+
     </div>
   );
 };
