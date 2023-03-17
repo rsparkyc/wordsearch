@@ -8,6 +8,8 @@ const WordSearch = () => {
   const [grid, setGrid] = useState([]);
   const [selection, setSelection] = useState({ first: null, last: null });
   const [queuedWord, setQueuedWord] = useState("");
+  const [submittedWords, setSubmittedWords] = useState([]);
+
 
   const handleCellClick = (i, j) => {
     if (!selection.first) {
@@ -22,6 +24,16 @@ const WordSearch = () => {
     }
   };
 
+  const handleSubmit = () => {
+    if (queuedWord) {
+      setSubmittedWords([
+        ...submittedWords,
+        { word: queuedWord, first: selection.first, last: selection.last },
+      ]);
+      setQueuedWord("");
+      setSelection({ first: null, last: null });
+    }
+  };  
 
   const isSelected = (i, j) => {
     const { first, last } = selection;
@@ -61,6 +73,9 @@ const WordSearch = () => {
   };
 
   const getCellClass = (i, j) => {
+    if (isSubmitted(i, j)) {
+      return "submitted";
+    }  
     if (isSelected(i, j)) {
       return "selected";
     }
@@ -89,6 +104,52 @@ const WordSearch = () => {
     }
     return word;
   };
+
+  const isSubmitted = (i, j) => {
+    for (const word of submittedWords) {
+      const cells = getCellsForWord(word);
+      if (cells.some(cell => cell.i === i && cell.j === j)) {
+        return true;
+      }
+    }
+    return false;
+  };
+  
+  const getCellsForWord = word => {
+    const cells = [];
+    for (const submittedWord of submittedWords) {
+      if (submittedWord.word === word) {
+        const firstAndLast = getFirstAndLastCellForWord(word);
+        if (!firstAndLast) continue; // Skip if first and last cell coordinates are not available
+        
+        const { first, last } = firstAndLast;
+        const dx = last.j - first.j;
+        const dy = last.i - first.i;
+        const steps = Math.max(Math.abs(dx), Math.abs(dy));
+        const stepX = dx / steps;
+        const stepY = dy / steps;
+  
+        for (let step = 0; step <= steps; step++) {
+          const x = first.j + step * stepX;
+          const y = first.i + step * stepY;
+          cells.push({ i: y, j: x });
+        }
+      }
+    }
+    return cells;
+  };
+   
+  const getFirstAndLastCellForWord = word => {
+    for (const submittedWordInfo of submittedWords) {
+      if (submittedWordInfo.word === word) {
+        return {
+          first: submittedWordInfo.first,
+          last: submittedWordInfo.last,
+        };
+      }
+    }
+    return null;
+  };   
   
   useEffect(() => {
     async function generate() {
@@ -119,12 +180,20 @@ const WordSearch = () => {
       {queuedWord ? (
         <>
           <span>Queued Word: {queuedWord}</span>
-          <button style={{ marginLeft: "20px" }}>Submit</button>
+          <button style={{ marginLeft: "20px" }} onClick={handleSubmit}>Submit</button>
         </>
-      ) : (
-        <span>Select a word to queue for submission</span>
-      )}
-    </div>
+        ) : (
+          <span>Select a word to queue for submission</span>
+        )}
+      </div>
+      <div className="submitted-words-container">
+        <h3>Submitted Words:</h3>
+        <ul>
+          {submittedWords.map((submittedWordInfo, index) => (
+            <li key={`submitted-word-${index}`}>{submittedWordInfo.word}</li>
+          ))}
+        </ul>
+     </div>
 
     </div>
   );

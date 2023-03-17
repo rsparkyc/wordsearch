@@ -60,3 +60,40 @@
   flex-direction: column;
   align-items: center;
 }
+
+.cell.submitted {
+  background-color: rgba(255, 255, 0, 0.5);
+}
+
+.submitted-words-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.submitted-words-container ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.submitted-words-container li {
+  font-size: 1.2em;
+  padding: 10px;
+  margin: 5px;
+  border: 2px solid #3f51b5;
+  border-radius: 5px;
+  background-color: rgba(63, 81, 181, 0.1);
+  color: #3f51b5;
+  font-weight: bold;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.submitted-words-container li:hover {
+  transform: scale(1.1);
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+}
