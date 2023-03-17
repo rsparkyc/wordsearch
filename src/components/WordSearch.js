@@ -10,6 +10,23 @@ const WordSearch = () => {
   const [queuedWord, setQueuedWord] = useState("");
   const [submittedWords, setSubmittedWords] = useState([]);
 
+  const getCells = (first, last) => {
+    const cells = [];
+    if (first && last) {
+      const dx = last.j - first.j;
+      const dy = last.i - first.i;
+      const steps = Math.max(Math.abs(dx), Math.abs(dy));
+      const stepX = dx / steps;
+      const stepY = dy / steps;
+  
+      for (let step = 0; step <= steps; step++) {
+        const x = first.j + step * stepX;
+        const y = first.i + step * stepY;
+        cells.push({ i: y, j: x });
+      }
+    }
+    return cells;
+  };  
 
   const handleCellClick = (i, j) => {
     if (!selection.first) {
@@ -26,15 +43,16 @@ const WordSearch = () => {
 
   const handleSubmit = () => {
     if (queuedWord) {
+      const cells = getCells(selection.first, selection.last);
       setSubmittedWords([
         ...submittedWords,
-        { word: queuedWord, first: selection.first, last: selection.last },
+        { word: queuedWord, cells: cells },
       ]);
       setQueuedWord("");
       setSelection({ first: null, last: null });
     }
-  };  
-
+  };
+  
   const isSelected = (i, j) => {
     const { first, last } = selection;
     if (!first || !last) {
@@ -106,50 +124,16 @@ const WordSearch = () => {
   };
 
   const isSubmitted = (i, j) => {
-    for (const word of submittedWords) {
-      const cells = getCellsForWord(word);
-      if (cells.some(cell => cell.i === i && cell.j === j)) {
-        return true;
+    for (const submittedWord of submittedWords) {
+      for (const cell of submittedWord.cells) {
+        if (cell.i === i && cell.j === j) {
+          return true;
+        }
       }
     }
     return false;
   };
   
-  const getCellsForWord = word => {
-    const cells = [];
-    for (const submittedWord of submittedWords) {
-      if (submittedWord.word === word) {
-        const firstAndLast = getFirstAndLastCellForWord(word);
-        if (!firstAndLast) continue; // Skip if first and last cell coordinates are not available
-        
-        const { first, last } = firstAndLast;
-        const dx = last.j - first.j;
-        const dy = last.i - first.i;
-        const steps = Math.max(Math.abs(dx), Math.abs(dy));
-        const stepX = dx / steps;
-        const stepY = dy / steps;
-  
-        for (let step = 0; step <= steps; step++) {
-          const x = first.j + step * stepX;
-          const y = first.i + step * stepY;
-          cells.push({ i: y, j: x });
-        }
-      }
-    }
-    return cells;
-  };
-   
-  const getFirstAndLastCellForWord = word => {
-    for (const submittedWordInfo of submittedWords) {
-      if (submittedWordInfo.word === word) {
-        return {
-          first: submittedWordInfo.first,
-          last: submittedWordInfo.last,
-        };
-      }
-    }
-    return null;
-  };   
   
   useEffect(() => {
     async function generate() {
