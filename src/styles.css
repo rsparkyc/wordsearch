@@ -20,5 +20,25 @@
   border: 1px solid #000;
   float: left;
   text-transform: uppercase;
+  cursor: pointer;
 }
 
+.cell.selected {
+  background-color: #7ef29d;
+  color: #fff;
+}
+
+.cell:hover {
+  background-color: #eee;
+}
+
+.cell.unselectable {
+  cursor: not-allowed;
+  color: rgba(0, 0, 0, 0.3); /* Reduce contrast by using a semi-transparent color */
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Add a subtle text shadow for a blurred effect */
+}
+
+.cell.first-selected {
+  /* Add desired styling for the first selected letter */
+  background-color: rgba(0, 150, 0, 0.5);
+}

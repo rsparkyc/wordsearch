@@ -1,7 +1,7 @@
 let myRng;
 function setRng(rng) {
   if (!myRng){ 
-    myRng = rng();
+    myRng = rng(13);
   }
 }
 
