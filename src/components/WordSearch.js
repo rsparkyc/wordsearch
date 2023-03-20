@@ -9,6 +9,7 @@ const WordSearch = () => {
   const [selection, setSelection] = useState({ first: null, last: null });
   const [queuedWord, setQueuedWord] = useState("");
   const [submittedWords, setSubmittedWords] = useState([]);
+  const [hoveredSelection, setHoveredSelection] = useState({ first: null, last: null });
 
   const getCells = (first, last) => {
     const cells = [];
@@ -32,14 +33,22 @@ const WordSearch = () => {
     if (!selection.first) {
       setSelection({ first: { i, j }, last: null });
       setQueuedWord("");
+      setHoveredSelection({ first: null, last: null });
     } else if (selection.first.i === i && selection.first.j === j) {
       setSelection({ first: null, last: null });
       setQueuedWord("");
+      setHoveredSelection({ first: null, last: null });
     } else if (isSelectable(i, j)) {
       setSelection({ ...selection, last: { i, j } });
       setQueuedWord(getSelectedWord(i, j));
     }
   };
+
+  const handleCellMouseEnter = (i, j) => {
+    if (selection.first && !selection.last && isSelectable(i, j)) {
+      setHoveredSelection({ first: selection.first, last: { i, j } });
+    }
+  };  
 
   const handleSubmit = () => {
     if (queuedWord) {
@@ -53,27 +62,6 @@ const WordSearch = () => {
     }
   };
   
-  const isSelected = (i, j) => {
-    const { first, last } = selection;
-    if (!first || !last) {
-      return false;
-    }
-    const dx = last.j - first.j;
-    const dy = last.i - first.i;
-    const steps = Math.max(Math.abs(dx), Math.abs(dy));
-    const stepX = dx / steps;
-    const stepY = dy / steps;
-
-    for (let step = 0; step <= steps; step++) {
-      const x = first.j + step * stepX;
-      const y = first.i + step * stepY;
-      if (x === j && y === i) {
-        return true;
-      }
-    }
-    return false;
-  };
-
   const isSelectable = (i, j) => {
     if (!selection.first) {
       return true;
@@ -90,11 +78,35 @@ const WordSearch = () => {
     );
   };
 
+  const checkSelection = (i, j, sel) => {
+    const { first, last } = sel;
+    if (!first || !last) {
+      return false;
+    }
+    const dx = last.j - first.j;
+    const dy = last.i - first.i;
+    const steps = Math.max(Math.abs(dx), Math.abs(dy));
+    const stepX = dx / steps;
+    const stepY = dy / steps;
+  
+    for (let step = 0; step <= steps; step++) {
+      const x = first.j + step * stepX;
+      const y = first.i + step * stepY;
+      if (x === j && y === i) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   const getCellClass = (i, j) => {
     if (isSubmitted(i, j)) {
       return "submitted";
-    }  
-    if (isSelected(i, j)) {
+    }
+    if (checkSelection(i, j, hoveredSelection)) {
+      return "hovered";
+    }
+    if (checkSelection(i, j, selection)) {
       return "selected";
     }
     if (selection.first && i === selection.first.i && j === selection.first.j) {
@@ -104,8 +116,8 @@ const WordSearch = () => {
       return "unselectable";
     }
     return "";
-  };  
-
+  };
+  
   const getSelectedWord = (i, j) => {
     const { first } = selection;
     const dx = j - first.j;
@@ -153,6 +165,7 @@ const WordSearch = () => {
                 key={`cell-${i}-${j}`}
                 className={`cell ${getCellClass(i, j)}`}
                 onClick={() => handleCellClick(i, j)}
+                onMouseEnter={() => handleCellMouseEnter(i, j)}
               >
                 {cell}
               </div>
