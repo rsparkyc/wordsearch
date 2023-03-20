@@ -1,7 +1,7 @@
 let myRng;
 function setRng(rng) {
   if (!myRng){ 
-    myRng = rng(13);
+    myRng = rng(generateUniqueIntegerFromDate());
   }
 }
 
@@ -12,6 +12,16 @@ function getRandom() {
   console.log("no random set");
   return 0;
 }
+
+const generateUniqueIntegerFromDate = () => {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1; // Month is 0-indexed, so we add 1
+  const day = currentDate.getDate();
+
+  return year * 10000 + month * 100 + day;
+};
+
 
 const badWordsUrl = "https://raw.githubusercontent.com/jamesfdickinson/badwords/master/lib/lang.json";
 const goodWordsUrl = "https://raw.githubusercontent.com/sindresorhus/word-list/main/words.txt";
