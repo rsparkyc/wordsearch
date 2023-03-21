@@ -9,7 +9,7 @@ const WordSearch = () => {
   const [selection, setSelection] = useState({ first: null, last: null });
   const [queuedWord, setQueuedWord] = useState("");
   const [submittedWords, setSubmittedWords] = useState([]);
-  const [hoveredSelection, setHoveredSelection] = useState({ first: null, last: null });
+  const [selectionMode, setSelectionMode] = useState(false);
 
   const getCells = (first, last) => {
     const cells = [];
@@ -33,20 +33,21 @@ const WordSearch = () => {
     if (!selection.first) {
       setSelection({ first: { i, j }, last: null });
       setQueuedWord("");
-      setHoveredSelection({ first: null, last: null });
+      setSelectionMode(true);
     } else if (selection.first.i === i && selection.first.j === j) {
       setSelection({ first: null, last: null });
       setQueuedWord("");
-      setHoveredSelection({ first: null, last: null });
+      setSelectionMode(false);
     } else if (isSelectable(i, j)) {
       setSelection({ ...selection, last: { i, j } });
       setQueuedWord(getSelectedWord(i, j));
+      setSelectionMode(false);
     }
   };
 
   const handleCellMouseEnter = (i, j) => {
-    if (selection.first && !selection.last && isSelectable(i, j)) {
-      setHoveredSelection({ first: selection.first, last: { i, j } });
+    if (selectionMode && isSelectable(i, j)) {
+      setSelection({ first: selection.first, last: { i, j } });
     }
   };  
 
@@ -100,22 +101,22 @@ const WordSearch = () => {
   };
 
   const getCellClass = (i, j) => {
-    if (isSubmitted(i, j)) {
-      return "submitted";
-    }
-    if (checkSelection(i, j, hoveredSelection)) {
-      return "hovered";
+    let cellClass = "cell";
+    if (selection.first && i === selection.first.i && j === selection.first.j) {
+      cellClass += " first-selected";
+      return cellClass;
     }
     if (checkSelection(i, j, selection)) {
-      return "selected";
+      cellClass += " selected";
+      return cellClass;
     }
-    if (selection.first && i === selection.first.i && j === selection.first.j) {
-      return "first-selected";
+    if (isSubmitted(i, j)) {
+      cellClass += " submitted";
     }
     if (selection.first && !isSelectable(i, j)) {
-      return "unselectable";
+      cellClass += " unselectable";
     }
-    return "";
+    return cellClass;
   };
   
   const getSelectedWord = (i, j) => {
@@ -163,7 +164,7 @@ const WordSearch = () => {
             {row.map((cell, j) => (
               <div
                 key={`cell-${i}-${j}`}
-                className={`cell ${getCellClass(i, j)}`}
+                className={`${getCellClass(i, j)}`}
                 onClick={() => handleCellClick(i, j)}
                 onMouseEnter={() => handleCellMouseEnter(i, j)}
               >
