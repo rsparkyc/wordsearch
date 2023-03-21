@@ -302,7 +302,12 @@ function diagonals(grid) {
   return diagonals; // Return the array of diagonal strings.
 }
 
+function validateWord(word) {
+  return false;
+}
+
 module.exports = {
   generateGrid,
-  getWordsForGame
+  getWordsForGame,
+  validateWord
 };

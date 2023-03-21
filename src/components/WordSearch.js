@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { generateGrid } from "../utils/helpers";
+import { generateGrid, validateWord } from "../utils/helpers";
 import "../styles.css";
 import seedrandom from "seedrandom";
 
@@ -19,7 +19,7 @@ const WordSearch = () => {
       const steps = Math.max(Math.abs(dx), Math.abs(dy));
       const stepX = dx / steps;
       const stepY = dy / steps;
-  
+
       for (let step = 0; step <= steps; step++) {
         const x = first.j + step * stepX;
         const y = first.i + step * stepY;
@@ -27,7 +27,7 @@ const WordSearch = () => {
       }
     }
     return cells;
-  };  
+  };
 
   const handleCellClick = (i, j) => {
     if (!selection.first) {
@@ -49,20 +49,22 @@ const WordSearch = () => {
     if (selectionMode && isSelectable(i, j)) {
       setSelection({ first: selection.first, last: { i, j } });
     }
-  };  
+  };
 
   const handleSubmit = () => {
     if (queuedWord) {
-      const cells = getCells(selection.first, selection.last);
-      setSubmittedWords([
-        ...submittedWords,
-        { word: queuedWord, cells: cells },
-      ]);
-      setQueuedWord("");
-      setSelection({ first: null, last: null });
+      if (validateWord(queuedWord)) {
+        const cells = getCells(selection.first, selection.last);
+        setSubmittedWords([
+          ...submittedWords,
+          { word: queuedWord, cells: cells },
+        ]);
+        setQueuedWord("");
+        setSelection({ first: null, last: null });
+      }
     }
   };
-  
+
   const isSelectable = (i, j) => {
     if (!selection.first) {
       return true;
@@ -89,7 +91,7 @@ const WordSearch = () => {
     const steps = Math.max(Math.abs(dx), Math.abs(dy));
     const stepX = dx / steps;
     const stepY = dy / steps;
-  
+
     for (let step = 0; step <= steps; step++) {
       const x = first.j + step * stepX;
       const y = first.i + step * stepY;
@@ -118,7 +120,7 @@ const WordSearch = () => {
     }
     return cellClass;
   };
-  
+
   const getSelectedWord = (i, j) => {
     const { first } = selection;
     const dx = j - first.j;
@@ -126,7 +128,7 @@ const WordSearch = () => {
     const steps = Math.max(Math.abs(dx), Math.abs(dy));
     const stepX = dx / steps;
     const stepY = dy / steps;
-  
+
     let word = "";
     for (let step = 0; step <= steps; step++) {
       const x = first.j + step * stepX;
@@ -146,8 +148,8 @@ const WordSearch = () => {
     }
     return false;
   };
-  
-  
+
+
   useEffect(() => {
     async function generate() {
       const newGrid = await generateGrid(gridSize, seedrandom);
@@ -174,24 +176,35 @@ const WordSearch = () => {
           </div>
         ))}
       </div>
+
       <div className="queued-word-container">
-      {queuedWord ? (
-        <>
-          <span>Queued Word: {queuedWord}</span>
-          <button style={{ marginLeft: "20px" }} onClick={handleSubmit}>Submit</button>
-        </>
+        {queuedWord ? (
+          <>
+            <button className="clear-selection" onClick={() => setSelection({ first: null, last: null })}>
+            </button>
+            <div className="queued-word">{queuedWord.split("").map((letter, index) => (
+              <div key={`queued-letter-${index}`} className="queued-letter">{letter}</div>
+            ))}</div>
+
+            <button className="submit-selection" onClick={handleSubmit}>
+            </button>
+          </>
         ) : (
           <span>Select a word to queue for submission</span>
         )}
       </div>
+
+
       <div className="submitted-words-container">
         <h3>Submitted Words:</h3>
-        <ul>
-          {submittedWords.map((submittedWordInfo, index) => (
-            <li key={`submitted-word-${index}`}>{submittedWordInfo.word}</li>
-          ))}
-        </ul>
-     </div>
+        {submittedWords.map((submittedWordInfo, index) => (
+          <div key={`submitted-word-${index}`}>
+            {submittedWordInfo.word.split('').map((letter, index) => (
+              <span key={`submitted-word-${index}-${letter}`}>{letter}</span>
+            ))}
+          </div>
+        ))}
+      </div>
 
     </div>
   );

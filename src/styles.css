@@ -44,18 +44,6 @@
   background-color: rgba(0, 150, 0, 0.5);
 }
 
-.queued-word-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  padding: 10px;
-  border: 2px dashed #ccc;
-  border-radius: 5px;
-  background-color: rgba(240, 240, 240, 0.8);
-  font-size: 1.2em;
-}
-
 .wordsearch-container {
   display: flex;
   flex-direction: column;
@@ -73,28 +61,123 @@
   margin-top: 20px;
 }
 
-.submitted-words-container ul {
-  list-style-type: none;
-  padding: 0;
+.submitted-words-container > div {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-}
-
-.submitted-words-container li {
-  font-size: 1.2em;
-  padding: 10px;
+  align-items: center;
   margin: 5px;
-  border: 2px solid #3f51b5;
-  border-radius: 5px;
-  background-color: rgba(63, 81, 181, 0.1);
-  color: #3f51b5;
-  font-weight: bold;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease;
 }
 
-.submitted-words-container li:hover {
-  transform: scale(1.1);
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+.submitted-words-container > div > span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2em;
+  font-weight: bold;
+  border: 1px solid black;
+  background-color: transparent;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.queued-word {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.clear-selection:hover,
+.submit-selection:hover {
+  background-color: #eee;
+}
+
+.queued-letter {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  border: 1px solid #000;
+  margin: 8px 0;
+  text-transform: uppercase;
+}
+
+.queued-word-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.clear-selection svg,
+.submit-selection svg {
+  width: 24px; /* adjusted */
+  height: 24px; /* adjusted */
+  margin: auto;
+}
+
+.clear-selection::before {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 24px;
+  background-color: #000;
+  transform: rotate(45deg);
+}
+
+.clear-selection::after {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 24px;
+  background-color: #000;
+  transform: rotate(-45deg);
+}
+
+.submit-selection::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-left: 24px solid #000;
+}
+
+.queued-word-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding: 10px;
+  border: 2px dashed #ccc;
+  background-color: rgba(240, 240, 240, 0.8);
+  font-size: 1.2em;
+}
+
+.clear-selection, .submit-selection {
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+  border: 1px solid #000;
+  background-color: transparent;
+  box-sizing: content-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.clear-selection {
+  background-color: #FF9999
+}
+
+.submit-selection {
+  background-color: #99FF99
 }
