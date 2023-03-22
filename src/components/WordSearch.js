@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { generateGrid, validateWord } from "../utils/helpers";
+import QueuedWord from './QueuedWord';
 import "../styles.css";
 import seedrandom from "seedrandom";
 
@@ -28,6 +29,12 @@ const WordSearch = () => {
     }
     return cells;
   };
+
+  const handleClear = () => {
+    setSelection({ first: null, last: null });
+    setQueuedWord("");
+    setSelectionMode(false);
+  }
 
   const handleCellClick = (i, j) => {
     if (!selection.first) {
@@ -177,25 +184,12 @@ const WordSearch = () => {
         ))}
       </div>
 
-      <div className="queued-word-container">
-        {queuedWord ? (
-          <>
-            <button className="clear-selection" onClick={() => {
-              setSelection({ first: null, last: null });
-              setQueuedWord("");
-            }}>
-            </button>
-            <div className="queued-word">{queuedWord.split("").map((letter, index) => (
-              <div key={`queued-letter-${index}`} className="queued-letter">{letter}</div>
-            ))}</div>
-
-            <button className="submit-selection" onClick={handleSubmit}>
-            </button>
-          </>
-        ) : (
-          <span>Select a word to queue for submission</span>
-        )}
-      </div>
+      <QueuedWord
+        gridSize={gridSize}
+        selectedWord={queuedWord}
+        clearWord={handleClear}
+        submitWord={handleSubmit}
+      />
 
 
       <div className="submitted-words-container">

@@ -82,16 +82,15 @@
 
 .queued-word {
   display: flex;
-  justify-content: center;
   align-items: center;
 }
 
-.clear-selection:hover,
-.submit-selection:hover {
-  background-color: #eee;
+.queued-word > div {
+  display: flex;
 }
 
-.queued-letter {
+.queue-box {
+  box-sizing: border-box;
   width: 40px;
   height: 40px;
   line-height: 40px;
@@ -103,17 +102,9 @@
   text-transform: uppercase;
 }
 
-.queued-word-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.clear-selection svg,
-.submit-selection svg {
-  width: 24px; /* adjusted */
-  height: 24px; /* adjusted */
-  margin: auto;
+.clear-selection:hover,
+.submit-selection:hover {
+  background-color: #eee;
 }
 
 .clear-selection::before {
@@ -163,7 +154,6 @@
   color: #000;
   border: 1px solid #000;
   background-color: transparent;
-  box-sizing: content-box;
   display: flex;
   justify-content: center;
   align-items: center;
