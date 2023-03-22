@@ -23,13 +23,10 @@
   cursor: pointer;
 }
 
-.cell.selected {
+.cell.selected, 
+.cell.selectable:hover {
   background-color: #7ef29d;
   color: #fff;
-}
-
-.cell:hover {
-  background-color: #eee;
 }
 
 .cell.unselectable {

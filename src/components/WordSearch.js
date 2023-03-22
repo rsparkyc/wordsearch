@@ -180,7 +180,10 @@ const WordSearch = () => {
       <div className="queued-word-container">
         {queuedWord ? (
           <>
-            <button className="clear-selection" onClick={() => setSelection({ first: null, last: null })}>
+            <button className="clear-selection" onClick={() => {
+              setSelection({ first: null, last: null });
+              setQueuedWord("");
+            }}>
             </button>
             <div className="queued-word">{queuedWord.split("").map((letter, index) => (
               <div key={`queued-letter-${index}`} className="queued-letter">{letter}</div>
