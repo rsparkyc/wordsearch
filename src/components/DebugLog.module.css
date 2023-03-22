@@ -1,0 +1,16 @@
+.debugLog {
+  background-color: black;
+  color: limegreen;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  white-space: pre-wrap;
+  padding: 10px;
+  overflow: auto;
+  max-height: 300px;
+  border: 2px solid limegreen;
+  border-radius: 5px;
+}
+
+.message {
+  margin-bottom: 2px;
+}
