@@ -1,5 +1,8 @@
 let myRng;
-function setRng(rng) {
+let log;
+
+function initialize(rng, addMessage) {
+  log = addMessage;
   if (!myRng){ 
     myRng = rng(generateUniqueIntegerFromDate());
   }
@@ -10,7 +13,7 @@ function getRandom() {
     return myRng();
   }
   console.log("no random set");
-  return 0;
+  return 1;
 }
 
 const generateUniqueIntegerFromDate = () => {
@@ -21,7 +24,6 @@ const generateUniqueIntegerFromDate = () => {
 
   return year * 10000 + month * 100 + day;
 };
-
 
 const badWordsUrl = "https://raw.githubusercontent.com/jamesfdickinson/badwords/master/lib/lang.json";
 const goodWordsUrl = "https://raw.githubusercontent.com/sindresorhus/word-list/main/words.txt";
@@ -51,11 +53,10 @@ async function getGoodWords() {
   }
 };
 
-async function generateGrid(gridSize, rng) {
-  setRng(rng);
+async function generateGrid(gridSize) {
   getGoodWords();
 
-  console.log("generating grid");
+  log("generating grid");
   const grid = [];
   for (let i = 0; i < gridSize; i++) {
     grid.push([]);
@@ -66,7 +67,7 @@ async function generateGrid(gridSize, rng) {
 
   for (const word of await getWordsForGame(100, 4, gridSize)) {
     if (tryToInsertWord(grid, word)) {
-      console.log("inserted " + word);
+      log("inserted " + word);
     }
   } 
   fillGridWithRandomLetters(grid);
@@ -87,7 +88,7 @@ async function containsBadWord(grid) {
     for (const badWord of badWords) {
       const lowerBadWord = badWord.toLowerCase();
       if (lowerString.includes(lowerBadWord) || lowerString.includes(reverseString(lowerBadWord))) {
-        console.log(`Bad word "${badWord}" found in string "${string}"`);
+        log(`Bad word "${badWord}" found in string "${string}"`);
         return true;
       }
     }
@@ -307,6 +308,7 @@ function validateWord(word) {
 }
 
 module.exports = {
+  initialize,
   generateGrid,
   getWordsForGame,
   validateWord

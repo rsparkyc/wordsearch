@@ -28,3 +28,6 @@ export const useDebugLog = () => {
   console.log("returning context");
   return context;
 };
+
+export default DebugLogContext;
+

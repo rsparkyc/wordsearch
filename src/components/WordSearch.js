@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { generateGrid, validateWord } from "../utils/helpers";
+import { generateGrid, initialize, validateWord } from "../utils/helpers";
 import QueuedWord from './QueuedWord';
 import "../styles.css";
 import seedrandom from "seedrandom";
@@ -14,6 +14,7 @@ const WordSearch = ({gridSize}) => {
   const [selectionMode, setSelectionMode] = useState(false);
   const { addMessage } = useDebugLog();
 
+  initialize(seedrandom, addMessage);
 
   const getCells = (first, last) => {
     const cells = [];
@@ -159,11 +160,10 @@ const WordSearch = ({gridSize}) => {
     return false;
   };
 
-
   useEffect(() => {
     async function generate() {
       addMessage("generating grid");
-      const newGrid = await generateGrid(gridSize, seedrandom);
+      const newGrid = await generateGrid(gridSize);
       setGrid(newGrid);
     }
     generate();
