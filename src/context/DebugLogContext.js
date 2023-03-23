@@ -8,7 +8,11 @@ export const DebugLogProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
 
   const addMessage = (message) => {
-    console.log("adding message to debug log: " + message);
+    // const now = new Date();
+    // const timestamp = `${now.toLocaleDateString()} ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}`;
+    // const formattedMessage = `${timestamp} | ${message}`;
+
+    console.log(message);
     setMessages((prevMessages) => [...prevMessages, message]);
   };
 

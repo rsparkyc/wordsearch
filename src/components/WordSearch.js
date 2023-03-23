@@ -5,7 +5,6 @@ import "../styles.css";
 import seedrandom from "seedrandom";
 import { useDebugLog } from '../context/DebugLogContext';
 
-
 const WordSearch = ({gridSize}) => {
   const [grid, setGrid] = useState([]);
   const [selection, setSelection] = useState({ first: null, last: null });
@@ -162,7 +161,6 @@ const WordSearch = ({gridSize}) => {
 
   useEffect(() => {
     async function generate() {
-      addMessage("generating grid");
       const newGrid = await generateGrid(gridSize);
       setGrid(newGrid);
     }
