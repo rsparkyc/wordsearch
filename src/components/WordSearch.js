@@ -18,8 +18,9 @@ const WordSearch = ({gridSize}) => {
   const handleInvalidWord = () => {
     addMessage("setting word as invalid")
     setIsInvalidWord(true);
-    
+  
     setTimeout(() => {
+      handleClear();
       setIsInvalidWord(false);
     }, 2000);
   };
@@ -72,9 +73,10 @@ const WordSearch = ({gridSize}) => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (queuedWord) {
-      if (validateWord(queuedWord)) {
+      const isValid = await validateWord(queuedWord);
+      if (isValid) {
         const cells = getCells(selection.first, selection.last);
         setSubmittedWords([
           ...submittedWords,

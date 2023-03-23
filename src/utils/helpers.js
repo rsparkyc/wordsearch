@@ -303,10 +303,12 @@ function diagonals(grid) {
   return diagonals; // Return the array of diagonal strings.
 }
 
-function validateWord(word) {
+async function validateWord(word) {
+  const goodWords = await getGoodWords();
   log("Checking " + word);
-  return word.length == 4;
+  return goodWords.includes(word);
 }
+
 
 module.exports = {
   initialize,

@@ -5,14 +5,8 @@ const QueuedWord = ({ gridSize, selectedWord, clearWord, submitWord, isInvalidWo
   const [invalid, setInvalid] = useState(false);
 
   useEffect(() => {
-    if (isInvalidWord) {
-      setInvalid(true);
-      setTimeout(() => {
-        clearWord();
-        setInvalid(false);
-      }, 2000);
-    }
-  }, [isInvalidWord, clearWord]);
+    setInvalid(isInvalidWord);
+  }, [isInvalidWord]);
 
   return (
     <div className="queued-word">
