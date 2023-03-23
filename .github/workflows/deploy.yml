@@ -1,0 +1,36 @@
+name: Deploy to S3
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 18
+
+    - name: Install dependencies and build
+      run: |
+        npm ci
+        npm run build
+
+    - name: Assume AWS IAM role
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-region: us-east-1 
+        role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
+        role-duration-seconds: 1800
+
+    - name: Deploy to S3
+      run: |
+        aws s3 sync public/ s3://word.ryancaskey.com/ --delete --acl public-read
+
