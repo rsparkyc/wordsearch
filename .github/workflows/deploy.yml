@@ -23,14 +23,11 @@ jobs:
         npm ci
         npm run build
 
-    - name: Assume AWS IAM role
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-region: us-east-1 
-        role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
-        role-duration-seconds: 1800
-
     - name: Deploy to S3
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: us-west-2 # Replace with your desired AWS region
       run: |
         aws s3 sync public/ s3://word.ryancaskey.com/ --delete --acl public-read
 
