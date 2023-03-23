@@ -4,8 +4,7 @@ import QueuedWord from './QueuedWord';
 import "../styles.css";
 import seedrandom from "seedrandom";
 
-const WordSearch = () => {
-  const gridSize = 8;
+const WordSearch = ({gridSize}) => {
   const [grid, setGrid] = useState([]);
   const [selection, setSelection] = useState({ first: null, last: null });
   const [queuedWord, setQueuedWord] = useState("");

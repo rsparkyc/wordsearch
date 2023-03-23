@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import styles from './DebugLog.module.css';
+import * as styles from './DebugLog.module.css';
 
-const DebugLog = ({ messages }) => {
+const DebugLog = ({ messages, cellWidth, numberOfCells }) => {
+  const terminalWidth = cellWidth * numberOfCells;
+
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -14,10 +16,9 @@ const DebugLog = ({ messages }) => {
 
   return (
     <>
-    <h2>Debug</h2>
-    <div className={styles?.debugLog}>
+    <div className={styles.debugLog} style={{ width: terminalWidth }}>
       {messages.map((message, index) => (
-        <div key={index} className={styles?.message}>
+        <div key={index} className={styles.message}>
           {message}
         </div>
       ))}
