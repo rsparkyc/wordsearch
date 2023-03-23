@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as styles from './DebugLog.module.css';
+import { useDebugLog } from "../context/DebugLogContext";
 
-const DebugLog = ({ messages, cellWidth, numberOfCells }) => {
+
+const DebugLog = ({ cellWidth, numberOfCells }) => {
+  const { messages } = useDebugLog();
   const terminalWidth = cellWidth * numberOfCells;
 
   const messagesEndRef = useRef(null);

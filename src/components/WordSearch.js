@@ -3,6 +3,8 @@ import { generateGrid, validateWord } from "../utils/helpers";
 import QueuedWord from './QueuedWord';
 import "../styles.css";
 import seedrandom from "seedrandom";
+import { useDebugLog } from '../context/DebugLogContext';
+
 
 const WordSearch = ({gridSize}) => {
   const [grid, setGrid] = useState([]);
@@ -10,6 +12,8 @@ const WordSearch = ({gridSize}) => {
   const [queuedWord, setQueuedWord] = useState("");
   const [submittedWords, setSubmittedWords] = useState([]);
   const [selectionMode, setSelectionMode] = useState(false);
+  const { addMessage } = useDebugLog();
+
 
   const getCells = (first, last) => {
     const cells = [];
@@ -158,6 +162,7 @@ const WordSearch = ({gridSize}) => {
 
   useEffect(() => {
     async function generate() {
+      addMessage("generating grid");
       const newGrid = await generateGrid(gridSize, seedrandom);
       setGrid(newGrid);
     }

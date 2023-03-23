@@ -14,8 +14,7 @@ const QueuedWord = ({ gridSize, selectedWord, clearWord, submitWord }) => {
           </div>
         ))}
       </div>
-      <button className="submit-selection" onClick={submitWord}>
-            </button>
+      <button className="submit-selection" onClick={submitWord}></button>
     </div>
   );
 };
