@@ -304,7 +304,8 @@ function diagonals(grid) {
 }
 
 function validateWord(word) {
-  return false;
+  log("Checking " + word);
+  return word.length == 4;
 }
 
 module.exports = {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import WordSearch from "../components/WordSearch"
 import DebugLog from '../components/DebugLog';
 import * as styles from './Container.module.css';

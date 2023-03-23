@@ -89,19 +89,6 @@
   display: flex;
 }
 
-.queue-box {
-  box-sizing: border-box;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
-  font-size: 24px;
-  font-weight: bold;
-  border: 1px solid #000;
-  margin: 8px 0;
-  text-transform: uppercase;
-}
-
 .clear-selection:hover,
 .submit-selection:hover {
   background-color: #eee;
@@ -167,4 +154,38 @@
 
 .submit-selection {
   background-color: #99FF99
+}
+
+.queue-box {
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  border: 1px solid #000;
+  margin: 8px 0;
+  text-transform: uppercase;
+  background-color: white;
+  color: black;
+}
+
+.queue-box.invalid-word {
+  animation: invalidWordAnimation 2s forwards;
+}
+
+@keyframes invalidWordAnimation {
+  0% {
+    background-color: red;
+    color: black;
+  }
+  50% {
+    background-color: red;
+    color: black;
+  }
+  100% {
+    background-color: white;
+    color: transparent;
+  }
 }

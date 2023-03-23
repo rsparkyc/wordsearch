@@ -13,6 +13,17 @@ const WordSearch = ({gridSize}) => {
   const [selectionMode, setSelectionMode] = useState(false);
   const { addMessage } = useDebugLog();
 
+  const [isInvalidWord, setIsInvalidWord] = useState(false);
+
+  const handleInvalidWord = () => {
+    addMessage("setting word as invalid")
+    setIsInvalidWord(true);
+    
+    setTimeout(() => {
+      setIsInvalidWord(false);
+    }, 2000);
+  };
+  
   initialize(seedrandom, addMessage);
 
   const getCells = (first, last) => {
@@ -71,6 +82,9 @@ const WordSearch = ({gridSize}) => {
         ]);
         setQueuedWord("");
         setSelection({ first: null, last: null });
+      }
+      else {
+        handleInvalidWord();
       }
     }
   };
@@ -191,8 +205,8 @@ const WordSearch = ({gridSize}) => {
         selectedWord={queuedWord}
         clearWord={handleClear}
         submitWord={handleSubmit}
+        isInvalidWord={isInvalidWord}
       />
-
 
       <div className="submitted-words-container">
         <h3>Submitted Words:</h3>
