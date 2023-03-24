@@ -303,10 +303,26 @@ function diagonals(grid) {
   return diagonals; // Return the array of diagonal strings.
 }
 
-async function validateWord(word) {
-  const goodWords = await getGoodWords();
+async function validateWord(word, submittedWords) {
   log("Checking " + word);
-  return goodWords.includes(word);
+
+  // Check if the word is already in the list of submitted words
+  const isDuplicate = submittedWords.some(
+    (submittedWord) => submittedWord.word === word
+  );
+
+  if (isDuplicate) {
+    log('Duplicate word: ' + word);
+    return false;
+  }
+
+  // Check if the word is in the list of good words
+  const goodWords = await getGoodWords();
+  const isValid = goodWords.includes(word);
+  if (!isValid) {
+    log('Invalid word: ' + word);
+  }
+  return isValid;
 }
 
 

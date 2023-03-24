@@ -1,0 +1,15 @@
+.scoreContainer {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  margin: 1rem;
+}
+
+.scoreLabel {
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+.scoreValue {
+  font-weight: normal;
+}

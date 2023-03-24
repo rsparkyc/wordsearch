@@ -4,6 +4,7 @@ import QueuedWord from './QueuedWord';
 import "../styles.css";
 import seedrandom from "seedrandom";
 import { useDebugLog } from '../context/DebugLogContext';
+import Score from './Score';
 
 const WordSearch = ({gridSize}) => {
   const [grid, setGrid] = useState([]);
@@ -14,6 +15,8 @@ const WordSearch = ({gridSize}) => {
   const { addMessage } = useDebugLog();
 
   const [isInvalidWord, setIsInvalidWord] = useState(false);
+
+  const [score, setScore] = useState(0);
 
   const handleInvalidWord = () => {
     addMessage("setting word as invalid")
@@ -72,10 +75,10 @@ const WordSearch = ({gridSize}) => {
       setSelection({ first: selection.first, last: { i, j } });
     }
   };
-
+ 
   const handleSubmit = async () => {
     if (queuedWord) {
-      const isValid = await validateWord(queuedWord);
+      const isValid = await validateWord(queuedWord, submittedWords);
       if (isValid) {
         const cells = getCells(selection.first, selection.last);
         setSubmittedWords([
@@ -84,8 +87,8 @@ const WordSearch = ({gridSize}) => {
         ]);
         setQueuedWord("");
         setSelection({ first: null, last: null });
-      }
-      else {
+        setScore(score + queuedWord.length);
+      } else {
         handleInvalidWord();
       }
     }
@@ -220,7 +223,7 @@ const WordSearch = ({gridSize}) => {
           </div>
         ))}
       </div>
-
+      <Score score={score} />
     </div>
   );
 };
