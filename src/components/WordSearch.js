@@ -5,6 +5,8 @@ import "../styles.css";
 import seedrandom from "seedrandom";
 import { useDebugLog } from '../context/DebugLogContext';
 import Score from './Score';
+import SubmittedWords from './SubmittedWords';
+
 
 const WordSearch = ({gridSize}) => {
   const [grid, setGrid] = useState([]);
@@ -222,16 +224,11 @@ const WordSearch = ({gridSize}) => {
         isInvalidWord={isInvalidWord}
       />
 
-      <div className="submitted-words-container">
-        <h3>Submitted Words:</h3>
-        {submittedWords.map((submittedWordInfo, index) => (
-          <div key={`submitted-word-${index}`}>
-            {submittedWordInfo.word.split('').map((letter, index) => (
-              <span key={`submitted-word-${index}-${letter}`}>{letter}</span>
-            ))}
-          </div>
-        ))}
-      </div>
+      <SubmittedWords
+        submittedWords={submittedWords}
+        calculateWordScore={calculateWordScore}
+      />
+
       <Score score={score} />
     </div>
   );
