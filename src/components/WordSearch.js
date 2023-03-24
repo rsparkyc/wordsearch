@@ -87,13 +87,22 @@ const WordSearch = ({gridSize}) => {
         ]);
         setQueuedWord("");
         setSelection({ first: null, last: null });
-        setScore(score + queuedWord.length);
+        const wordScore = calculateWordScore(queuedWord);
+        setScore(score + wordScore);
       } else {
         handleInvalidWord();
       }
     }
   };
-
+  
+  function calculateWordScore(word) {
+    let wordScore = 0;
+    for (let i = 1; i <= word.length; i++) {
+      wordScore += i;
+    }
+    return wordScore;
+  }
+  
   const isSelectable = (i, j) => {
     if (!selection.first) {
       return true;
