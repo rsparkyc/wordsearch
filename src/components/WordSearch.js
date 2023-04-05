@@ -15,10 +15,14 @@ const WordSearch = ({gridSize}) => {
   const [submittedWords, setSubmittedWords] = useState([]);
   const [selectionMode, setSelectionMode] = useState(false);
   const { addMessage } = useDebugLog();
-
   const [isInvalidWord, setIsInvalidWord] = useState(false);
-
   const [score, setScore] = useState(0);
+
+  const maxWords = 5;
+  const [finalScore, setFinalScore] = useState(null);
+  const [copyStatus, setCopyStatus] = useState('');
+
+
 
   const handleInvalidWord = () => {
     addMessage("setting word as invalid")
@@ -79,10 +83,10 @@ const WordSearch = ({gridSize}) => {
   };
  
   const handleSubmit = async () => {
-    if (queuedWord) {
+    if (submittedWords.length < maxWords && queuedWord) {
       const isValid = await validateWord(queuedWord, submittedWords);
       if (isValid) {
-        const cells = getCells(selection.first, selection.last);
+      const cells = getCells(selection.first, selection.last);
         setSubmittedWords([
           ...submittedWords,
           { word: queuedWord, cells: cells },
@@ -96,6 +100,15 @@ const WordSearch = ({gridSize}) => {
       }
     }
   };
+
+  useEffect(() => {
+    if (submittedWords.length === maxWords) {
+      const totalScore = submittedWords.reduce((acc, cur) => {
+        return acc + calculateWordScore(cur.word);
+      }, 0);
+      setFinalScore(totalScore);
+    }
+  }, [submittedWords, calculateWordScore]);
   
   function calculateWordScore(word) {
     let wordScore = 0;
@@ -197,6 +210,19 @@ const WordSearch = ({gridSize}) => {
     generate();
   }, []);
 
+  const handleCopy = async () => {
+    try {
+      const message = `I scored ${submittedWords
+        .map((word) => `+${calculateWordScore(word.word)}`)
+        .join(' ')} points in the Word Search game! Can you beat my score? Try it out and see how well you do! https://word.ryancaskey.com`;
+      await navigator.clipboard.writeText(message);
+      setCopyStatus('Score Copied!');
+    } catch (err) {
+      setCopyStatus('Failed to copy');
+    }
+  };
+  
+  
   return (
     <div className="wordsearch-container">
       <div className="wordsearch">
@@ -230,6 +256,14 @@ const WordSearch = ({gridSize}) => {
       />
 
       <Score score={score} />
+
+      {finalScore !== null && (
+        <div className="final-score">
+          {!copyStatus && <button onClick={handleCopy}>Share Your Score</button>}
+          {copyStatus && <span>{copyStatus}</span>}
+        </div>
+      )}
+
     </div>
   );
 };
